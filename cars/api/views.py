@@ -16,17 +16,18 @@ class CarViewSet(viewsets.ViewSet):
 
     def retrieve(self,request,pk=None):
         id = pk
-        if id:
+        check_car = Car.objects.filter(id=id)
+        if check_car:
             car = Car.objects.get(id=id)
             serializer = CarSerializer(car)
             response={
                 'data':serializer.data
             }
-            return Response(response,status=status.HTTP_302_FOUND)
+            return Response(response,status=status.HTTP_200_OK)
         response = {
             'data' : f'{id} not found'
         }
-        return Response(response,status=status.HTTP_404_NOT_FOUND)
+        return Response(response)
 
     def create(self,request):
         serializer = CarSerializer(data=request.data)
@@ -39,28 +40,62 @@ class CarViewSet(viewsets.ViewSet):
         response={
             'data':serializer.errors
         }
-        return Response(response,status=status.HTTP_400_BAD_REQUEST)
+        return Response(response,status=status.htt)
 
     def update(self,request,pk=None):
         id=pk
-        car=Car.objects.get(id=id)
-        serializer=CarSerializer(car,data=request.data)
-        if serializer.is_valid():
-            serializer.save()
+        car=Car.objects.filter(id=id)
+        if car:
+            car = Car.objects.get(id=id)
+            serializer=CarSerializer(car,data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                response={
+                    'data':serializer.data
+                }
+                return Response(response,status=status.HTTP_200_OK)
             response={
-                'data':f'{serializer.data["id"]} is updated'
+                'data':serializer.errors
             }
-            return Response(response,status=status.HTTP_205_RESET_CONTENT)
+            return Response(response,status=status.HTTP_200_OK)
         response={
-            'data':f'{serializer.data["id"]} not found'
+                'data':f'{id} not matched'
+            }
+        return Response(response,status=status.HTTP_200_OK)
+
+    def partial_update(self,request,pk=None):
+        id=pk
+        car=Car.objects.filter(id=id)
+        if car:
+            car=Car.objects.get(id=id)
+            serializer=CarSerializer(car,data=request.data,partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                response={
+                    'data':serializer.data
+                }
+                return Response(response,status=status.HTTP_200_OK)
+            response={
+                'data':serializer.errors
+            }
+            return Response(response,status=status.HTTP_200_OK)
+        response={
+            'data':f'{id} not found'
         }
-        return Response(response,status=status.HTTP_304_NOT_MODIFIED)
+        return Response(response,status=status.HTTP_200_OK)
 
     def destroy(self,request,pk=None):
         id=pk
-        car=Car.objects.get(id=id)
-        car.delete()
+        car=Car.objects.filter(id=id)
+        if car:
+            car=Car.objects.get(id=id)
+            car.delete()
+            response = {
+                'data':f'{id} deleted'
+            }
+            return Response(response,status=status.HTTP_200_OK)
         response = {
-            'data':f'{id} deleted'
+            'data':f'{id} not found'
         }
         return Response(response,status=status.HTTP_200_OK)
+        
