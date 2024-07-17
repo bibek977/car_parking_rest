@@ -1,101 +1,45 @@
-from rest_framework.response import Response
 from rest_framework import viewsets
-from cars.api.serializers import *
 from cars.models import *
-from rest_framework import status
+from .serializers import *
+from rest_framework.permissions import AllowAny,IsAuthenticated
+from .custom_page import *
+from cars.utils import today_date
+from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter,SearchFilter
 
-class CarViewSet(viewsets.ViewSet):
+class CarViewSet(viewsets.ModelViewSet):
+    queryset = Car.objects.all()
+    serializer_class=CarSerializer
+
+    # permission_classes=[IsAuthenticated]
+    pagination_class=CustomPagination
+
+    filter_backends=[OrderingFilter]
+    filterset_fields=['brand','liscence']
+
+class AreaViewSet(viewsets.ModelViewSet):
+    queryset=AreaName.objects.all()
+    serializer_class=AreaSerializer
+
+    permission_classes=[IsAuthenticated]
+
+class ParkViewSet(viewsets.ModelViewSet):
+    queryset=ParkingDetails.objects.all()
+    serializer_class=ParkSerializer
+
+    permission_classes=[IsAuthenticated]
     
-    def list(self,request):
-        car = Car.objects.all()
-        serializer = CarSerializer(car,many=True)
-        response = {
-            'data' : serializer.data,
-        }
-        return Response(response,status=status.HTTP_200_OK)
-
-    def retrieve(self,request,pk=None):
-        id = pk
-        check_car = Car.objects.filter(id=id)
-        if check_car:
-            car = Car.objects.get(id=id)
-            serializer = CarSerializer(car)
-            response={
-                'data':serializer.data
-            }
-            return Response(response,status=status.HTTP_200_OK)
-        response = {
-            'data' : f'{id} not found'
-        }
-        return Response(response)
-
-    def create(self,request):
-        serializer = CarSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            response={
-                'data':f'{serializer.data["id"]} created'
-            }
-            return Response(response,status=status.HTTP_201_CREATED)
-        response={
-            'data':serializer.errors
-        }
-        return Response(response,status=status.htt)
-
     def update(self,request,pk=None):
         id=pk
-        car=Car.objects.filter(id=id)
-        if car:
-            car = Car.objects.get(id=id)
-            serializer=CarSerializer(car,data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                response={
-                    'data':serializer.data
-                }
-                return Response(response,status=status.HTTP_200_OK)
-            response={
-                'data':serializer.errors
-            }
-            return Response(response,status=status.HTTP_200_OK)
-        response={
-                'data':f'{id} not matched'
-            }
-        return Response(response,status=status.HTTP_200_OK)
-
-    def partial_update(self,request,pk=None):
-        id=pk
-        car=Car.objects.filter(id=id)
-        if car:
-            car=Car.objects.get(id=id)
-            serializer=CarSerializer(car,data=request.data,partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                response={
-                    'data':serializer.data
-                }
-                return Response(response,status=status.HTTP_200_OK)
-            response={
-                'data':serializer.errors
-            }
-            return Response(response,status=status.HTTP_200_OK)
-        response={
-            'data':f'{id} not found'
-        }
-        return Response(response,status=status.HTTP_200_OK)
-
-    def destroy(self,request,pk=None):
-        id=pk
-        car=Car.objects.filter(id=id)
-        if car:
-            car=Car.objects.get(id=id)
-            car.delete()
-            response = {
-                'data':f'{id} deleted'
-            }
-            return Response(response,status=status.HTTP_200_OK)
-        response = {
-            'data':f'{id} not found'
-        }
-        return Response(response,status=status.HTTP_200_OK)
+        park=ParkingDetails.objects.get(id=id)
+        park.status=False
+        # park.checked_out=today_date
+        park.save()
+        car=Car.objects.get(liscence=park.car)
+        car.status=False
+        area=AreaName.objects.get(name=park.area)
+        area.status=False
+        area.save()
         
+        return Response({'data':f'{id} is parked out'})

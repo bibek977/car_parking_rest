@@ -1,6 +1,8 @@
 from django.db import models
 import uuid
 from django.utils.translation import gettext_lazy as _
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 class BaseModel(models.Model):
     id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
@@ -23,7 +25,7 @@ class Car(BaseModel):
     def __str__(self):
         return self.liscence
 
-class AreaName(models.Model):
+class AreaName(BaseModel):
     name=models.CharField(_("area_name"),max_length=200,unique=True)
     status=models.BooleanField(_("area_status"),default=False)
 
@@ -34,10 +36,10 @@ class AreaName(models.Model):
     def __str__(self):
         return self.name
 
-class ParkingDetails(models.Model):
+class ParkingDetails(BaseModel):
     car=models.ForeignKey(Car,on_delete=models.CASCADE)
     area=models.ForeignKey(AreaName,on_delete=models.CASCADE)
-    status=models.BooleanField(_("parking_status"),default=False)
+    status=models.BooleanField(_("parking_status"),default=True)
     checked_in=models.DateTimeField(_("date_checked_in"),auto_now=True)
     checked_out=models.DateTimeField(_("date_checked_out"),blank=True,null=True)
 
@@ -47,3 +49,14 @@ class ParkingDetails(models.Model):
 
     def __str__(self):
         return f"{str(self.car)} : {str(self.area)}"
+    
+@receiver(post_save, sender=ParkingDetails)
+def parked_in(sender,instance,created,**kwargs):
+    if created:
+        area=AreaName.objects.get(name=instance.area)
+        area.status=True
+        area.save()
+
+        car=Car.objects.get(liscence=instance.car)
+        car.status=True
+        car.save()

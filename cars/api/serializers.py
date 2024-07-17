@@ -35,3 +35,12 @@ class ParkSerializer(serializers.ModelSerializer):
             'checked_in',
             'checked_out'
         ]
+    def validate(self, data):
+        car=data.get('car')
+        if Car.objects.get(liscence=car).status==True:
+            raise serializers.ValidationError(f'Car : {car} is still parked in')
+        area=data.get('area')
+        if AreaName.objects.get(name=area).status==True:
+            raise serializers.ValidationError(f'Area : {area} is alreay occupied')
+        return data
+    
