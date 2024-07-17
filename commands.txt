@@ -1,0 +1,2 @@
+####### dry migrations (to see in cmd) ###########
+python manage.py makemigrations --dry-run --verbosity 3
