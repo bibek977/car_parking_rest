@@ -7,6 +7,7 @@ from cars.utils import today_date
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter,SearchFilter
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class CarViewSet(viewsets.ModelViewSet):
     queryset = Car.objects.all()
@@ -23,6 +24,7 @@ class AreaViewSet(viewsets.ModelViewSet):
     serializer_class=AreaSerializer
 
     permission_classes=[IsAuthenticated]
+    authentication_classes=[JWTAuthentication]
 
 class ParkViewSet(viewsets.ModelViewSet):
     queryset=ParkingDetails.objects.all()

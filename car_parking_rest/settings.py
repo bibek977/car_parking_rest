@@ -135,3 +135,7 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL="users.CustomUser"
+AUTHENTICATION_BACKENDS=[
+    'users.auth_backend.EmailAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
