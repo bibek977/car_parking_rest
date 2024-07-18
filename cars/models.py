@@ -3,6 +3,9 @@ import uuid
 from django.utils.translation import gettext_lazy as _
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.contrib.auth import get_user_model
+
+User=get_user_model()
 
 class BaseModel(models.Model):
     id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
@@ -17,6 +20,7 @@ class Car(BaseModel):
     color = models.CharField(_("color_of_car"),max_length=50)
     liscence = models.CharField(_("liscence_number"),max_length=20,unique=True)
     status = models.BooleanField(_("car_status"),default=False)
+    owner=models.ForeignKey(User,on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = _("Car")
@@ -37,8 +41,8 @@ class AreaName(BaseModel):
         return self.name
 
 class ParkingDetails(BaseModel):
-    car=models.ForeignKey(Car,on_delete=models.CASCADE)
-    area=models.ForeignKey(AreaName,on_delete=models.CASCADE)
+    car=models.ForeignKey(Car,on_delete=models.CASCADE,related_name='liscense')
+    area=models.ForeignKey(AreaName,on_delete=models.CASCADE,related_name='area_name')
     status=models.BooleanField(_("parking_status"),default=True)
     checked_in=models.DateTimeField(_("date_checked_in"),auto_now=True)
     checked_out=models.DateTimeField(_("date_checked_out"),blank=True,null=True)

@@ -1,5 +1,8 @@
 from cars.models import *
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
+
+User=get_user_model()
 
 class CarSerializer(serializers.ModelSerializer):
 
@@ -10,8 +13,16 @@ class CarSerializer(serializers.ModelSerializer):
             'brand',
             'color',
             'liscence',
-            'status'
+            'status',
+            'owner'
             ]
+        read_only_fields=['owner']
+
+    def create(self, validated_data):
+        request = self.context.get('request',None)
+        if request and hasattr(request,'user'):
+            validated_data['owner']=request.user
+        return super().create(validated_data)
 
 class AreaSerializer(serializers.ModelSerializer):
 

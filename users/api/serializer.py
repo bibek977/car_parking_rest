@@ -4,6 +4,7 @@ from rest_framework.validators import UniqueValidator
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
 
@@ -52,7 +53,7 @@ class SignUpSerializer(serializers.ModelSerializer):
         user = User.objects.create(
             email=validated_data['email'],
             phone=validated_data['phone'],
-            name=validated_data['name'],
+            # name=validated_data['name'],
             owner=validated_data['owner'] 
         )
     
@@ -60,3 +61,19 @@ class SignUpSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+
+# Need to perform other actions to get it
+class TokenSerializer(serializers.Serializer):
+    token=serializers.CharField(read_only=True)
+
+    def validate(self, attrs):
+        user=self.context['request'].user
+        if not user or not user.is_authenticated:
+            raise serializers.ValidationError("User is not authenticated")
+        refresh=RefreshToken.for_user(user)
+        attrs['token']={
+            'refresh':str(refresh),
+            'access':str(refresh.access_token)
+        }
+        return attrs

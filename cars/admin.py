@@ -2,13 +2,13 @@ from django.contrib import admin
 from cars.models import *
 
 class CarModelAdmin(admin.ModelAdmin):
-    list_display = ['id']
+    list_display = ['liscence']
 
 class AreaModelAdmin(admin.ModelAdmin):
-    list_display = ['id']
+    list_display = ['name']
 
 class ParkModelAdmin(admin.ModelAdmin):
-    list_display = ['id']
+    list_display = ['car','area']
 
 admin.site.register(Car,CarModelAdmin)
 admin.site.register(AreaName,AreaModelAdmin)

@@ -31,3 +31,4 @@ class LoginModelViewSet(viewsets.ViewSet):
             return Response(response)
 
         return Response({'errors': serializer.errors})
+    
