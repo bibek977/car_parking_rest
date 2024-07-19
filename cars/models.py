@@ -1,26 +1,30 @@
-from django.db import models
 import uuid
-from django.utils.translation import gettext_lazy as _
-from django.dispatch import receiver
-from django.db.models.signals import post_save
-from django.contrib.auth import get_user_model
 
-User=get_user_model()
+from django.contrib.auth import get_user_model
+from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
+
+User = get_user_model()
+
 
 class BaseModel(models.Model):
-    id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-    created_at=models.DateTimeField(auto_now=True)
-    updated_at=models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         abstract = True
 
+
 class Car(BaseModel):
-    brand = models.CharField(_("car_brand"),max_length=100)
-    color = models.CharField(_("color_of_car"),max_length=50)
-    liscence = models.CharField(_("liscence_number"),max_length=20,unique=True)
-    status = models.BooleanField(_("car_status"),default=False)
-    owner=models.ForeignKey(User,on_delete=models.CASCADE)
+    brand = models.CharField(_("car_brand"), max_length=100)
+    color = models.CharField(_("color_of_car"), max_length=50)
+    liscence = models.CharField(
+        _("liscence_number"), max_length=20, unique=True)
+    status = models.BooleanField(_("car_status"), default=False)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = _("Car")
@@ -29,9 +33,10 @@ class Car(BaseModel):
     def __str__(self):
         return self.liscence
 
+
 class AreaName(BaseModel):
-    name=models.CharField(_("area_name"),max_length=200,unique=True)
-    status=models.BooleanField(_("area_status"),default=False)
+    name = models.CharField(_("area_name"), max_length=200, unique=True)
+    status = models.BooleanField(_("area_status"), default=False)
 
     class Meta:
         verbose_name = _("Area")
@@ -40,12 +45,17 @@ class AreaName(BaseModel):
     def __str__(self):
         return self.name
 
+
 class ParkingDetails(BaseModel):
-    car=models.ForeignKey(Car,on_delete=models.CASCADE,related_name='liscense')
-    area=models.ForeignKey(AreaName,on_delete=models.CASCADE,related_name='area_name')
-    status=models.BooleanField(_("parking_status"),default=True)
-    checked_in=models.DateTimeField(_("date_checked_in"),auto_now=True)
-    checked_out=models.DateTimeField(_("date_checked_out"),blank=True,null=True)
+    car = models.ForeignKey(
+        Car, on_delete=models.CASCADE, related_name="liscense")
+    area = models.ForeignKey(
+        AreaName, on_delete=models.CASCADE, related_name="area_name"
+    )
+    status = models.BooleanField(_("parking_status"), default=True)
+    checked_in = models.DateTimeField(_("date_checked_in"), auto_now=True)
+    checked_out = models.DateTimeField(
+        _("date_checked_out"), blank=True, null=True)
 
     class Meta:
         verbose_name = _("Parking")
@@ -53,14 +63,15 @@ class ParkingDetails(BaseModel):
 
     def __str__(self):
         return f"{str(self.car)} : {str(self.area)}"
-    
+
+
 @receiver(post_save, sender=ParkingDetails)
-def parked_in(sender,instance,created,**kwargs):
+def parked_in(sender, instance, created, **kwargs):
     if created:
-        area=AreaName.objects.get(name=instance.area)
-        area.status=True
+        area = AreaName.objects.get(name=instance.area)
+        area.status = True
         area.save()
 
-        car=Car.objects.get(liscence=instance.car)
-        car.status=True
+        car = Car.objects.get(liscence=instance.car)
+        car.status = True
         car.save()

@@ -1,5 +1,64 @@
-####### dry migrations (to see in cmd) ###########
+===== dry migrations (to see in cmd) =====
 python manage.py makemigrations --dry-run --verbosity 3
 
-#### gmail ###
+==== gmail ====
 japj kbnk nqax mxcl
+
+========== conda ==============
+
+1. Initialize bash
+    ~/miniconda3/bin/conda init bash
+
+2. create environements
+    conda create -n name_of_environment
+
+3. activate
+    conda activate name_of_environment
+
+4. list out environements
+    conda info --envs
+
+5. switch environements
+    conda activate name_of_environment
+
+6. deactivate environements
+    conda deactivate
+
+7. export environements
+    conda env export > environement.yml
+
+8. import existing environement
+    conda env create -f environement.yml
+
+9. install conda package
+    conda install package_name
+    conda install package_name=0.0.0
+
+========= poetry ==========
+
+1. Initialize
+    poetry init
+
+2. add package
+    poetry add package_name
+
+3. Manaully change in pyproject.toml then update
+    poetry update
+
+4. run command
+    poetry run [python or django commands]
+
+5. To skip ""poetry run"" open shell
+    poetry shell
+
+6. requirements.txt package import
+    poetry add $(cat requirements.txt)
+
+7. for developement group package
+    poetry add --group dev package_name_1 packeage_name_2
+
+8. remove package
+    poetry remove package_name
+
+==== exit pre-commit verification =====
+    git commit --no-verify
