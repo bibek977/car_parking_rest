@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from .manager import CustomUserManager
@@ -11,8 +10,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     custom user model with email login
     """
 
-    OWNER_CHOICES = (("viewer", "viewer"),
-                     ("employee", "employee"), ("boss", "boss"))
+    OWNER_CHOICES = (
+        ("viewer", "viewer"),
+        ("employee", "employee"),
+        ("boss", "boss"),
+    )  # noqa
     email = models.EmailField(_("email"), unique=True)
     phone = models.CharField(_("phone"), unique=True, max_length=100)
     name = models.CharField(_("full_name"), max_length=100, blank=True)
@@ -24,7 +26,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     last_login = models.DateTimeField(auto_now=True)
 
     owner = models.CharField(
-        max_length=50, choices=OWNER_CHOICES, default="viewer")
+        max_length=50, choices=OWNER_CHOICES, default="viewer"
+    )  # noqa
 
     objects = CustomUserManager()
 

@@ -1,9 +1,6 @@
 ===== dry migrations (to see in cmd) =====
 python manage.py makemigrations --dry-run --verbosity 3
 
-==== gmail ====
-japj kbnk nqax mxcl
-
 ========== conda ==============
 
 1. Initialize bash

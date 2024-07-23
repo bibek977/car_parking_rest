@@ -3,14 +3,16 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from users.models import *
-
-from .serializer import *
+from .serializer import LoginSerializer, SignUpSerializer
 
 User = get_user_model()
 
 
 class SignupModelViewSet(viewsets.ModelViewSet):
+    """
+    Custom signup model viewset
+    """
+
     queryset = User.objects.all()
     serializer_class = SignUpSerializer
 

@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from cars.models import *
+from cars.models import AreaName, Car, ParkingDetails
 
 User = get_user_model()
 
@@ -32,11 +32,11 @@ class ParkSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         car = data.get("car")
-        if Car.objects.get(liscence=car).status == True:
-            raise serializers.ValidationError(
-                f"Car : {car} is still parked in")
+        if Car.objects.get(liscence=car).status is True:
+            raise serializers.ValidationError(f"Car : {car} is still parked in")  # noqa
         area = data.get("area")
-        if AreaName.objects.get(name=area).status == True:
+        if AreaName.objects.get(name=area).status is True:
             raise serializers.ValidationError(
-                f"Area : {area} is alreay occupied")
+                f"Area : {area} is alreay occupied"
+            )  # noqa
         return data

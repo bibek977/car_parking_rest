@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from cars.models import *
+from cars.models import AreaName, Car, ParkingDetails
 
 
 class CarModelAdmin(admin.ModelAdmin):

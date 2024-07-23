@@ -19,8 +19,19 @@ class BossPermissions(permissions.BasePermission):
         return request.user.owner == "boss"
 
 
-class OwnerPermission(permissions.BasePermission):
-    def has_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
+class NoPermissions(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return False
+
+
+class IsOwner(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
         return obj.owner == request.user
+
+
+class IsOwnerPark(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return obj.car.owner == request.user or request.user.owner in [
+            "boss",
+            "employee",
+        ]

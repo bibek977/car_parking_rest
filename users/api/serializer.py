@@ -4,8 +4,6 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from users.models import CustomUser
-
 User = get_user_model()
 
 
@@ -19,7 +17,9 @@ class LoginSerializer(serializers.Serializer):
 
         if email and password:
             user = authenticate(
-                request=self.context.get("request"), email=email, password=password
+                request=self.context.get("request"),
+                email=email,
+                password=password,  # noqa
             )
 
             if user:
@@ -30,8 +30,7 @@ class LoginSerializer(serializers.Serializer):
                     "Unable to login with given credentials"
                 )
         else:
-            raise serializers.ValidationError(
-                "must include email and password")
+            raise serializers.ValidationError("must include email and password")  # noqa
 
         attrs["user"] = user
         return attrs
@@ -39,7 +38,7 @@ class LoginSerializer(serializers.Serializer):
 
 class SignUpSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
-        required=True, validators=[UniqueValidator(queryset=User.objects.all())]
+        required=True, validators=[UniqueValidator(queryset=User.objects.all())]  # noqa
     )
     password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password]
@@ -81,6 +80,8 @@ class TokenSerializer(serializers.Serializer):
         if not user or not user.is_authenticated:
             raise serializers.ValidationError("User is not authenticated")
         refresh = RefreshToken.for_user(user)
-        attrs["token"] = {"refresh": str(
-            refresh), "access": str(refresh.access_token)}
+        attrs["token"] = {
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+        }  # noqa
         return attrs
