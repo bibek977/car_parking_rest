@@ -5,6 +5,11 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.decorators import action
+from cars.resource import CarModelResource
+from import_export.formats.base_formats import XLSX,CSV
+from django.http import HttpResponse
+from io import BytesIO,StringIO
 
 from cars.models import AreaName, Car, ParkingDetails
 from users.custom_permissions import (  # noqa
@@ -56,6 +61,56 @@ class CarViewSet(viewsets.ModelViewSet):
                 IsOwner | EmployeePermissions | BossPermissions,
             ]
         return [permissions() for permissions in self.permission_classes]
+    
+    @action(detail=False, methods=['get'])
+    def export_data(self,request):
+        user=request.user
+        queryset=Car.objects.filter(owner=user)
+
+        format_type=request.query_params.get('format_type','csv')
+        car_resource=CarModelResource()
+        dataset=car_resource.export(queryset)
+
+        if format_type == 'xlsx':
+            format_class = XLSX
+            content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            file_extension = 'xlsx'
+        else:
+            format_class = CSV
+            content_type = 'text/csv'
+            file_extension = 'csv'
+
+        response = HttpResponse(format_class().export_data(dataset), content_type=content_type)
+        response['Content-Disposition'] = f'attachment; filename="cars.{file_extension}"'
+        return response
+
+    @action(detail=False, methods=['post'])
+    def import_data(self, request):
+        file=request.FILES['file']
+        format_type=request.data.get('format_type','csv')
+
+
+        if format_type=='xlsx':
+            file_io = BytesIO(file.read())
+            format_class=XLSX
+        else:
+            file_content=file.read().decode('utf-8')
+            file_io = StringIO(file_content)
+            format_class=CSV
+
+        format_instance=format_class()
+        dataset=format_instance.create_dataset(file_io)
+        car_resource=CarModelResource()
+        result=car_resource.import_data(dataset,dery_run=True)
+
+        if not result.has_errors():
+            car_resource.import_data(dataset,dry_run=False)
+            return Response({'status':'imported'})
+        else:
+            return Response({"status":"error","errors":result.invalid_rows})
+
+
+    
 
 
 class AreaViewSet(viewsets.ModelViewSet):
