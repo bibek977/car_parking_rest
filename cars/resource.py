@@ -1,9 +1,10 @@
 from import_export.resources import ModelResource
+
 from cars.models import Car
 
 
 class CarModelResource(ModelResource):
-    def before_import_row(self,row,**kwargs):
+    def before_import_row(self, row, **kwargs):
         print(f"Before importing row : {row}")
 
     def after_import_row(self, row, row_result, **kwargs):
@@ -16,5 +17,5 @@ class CarModelResource(ModelResource):
         print("Car dataset exported")
 
     class Meta:
-        model=Car
-        list_display=['liscence','brand','color']
+        model = Car
+        list_display = ["liscence", "brand", "color"]

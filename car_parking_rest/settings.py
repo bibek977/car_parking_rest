@@ -42,12 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
-EXTERNAL_APPS = [
-    "rest_framework",
-    "users",
-    "cars",
-    "import_export"
-]
+EXTERNAL_APPS = ["rest_framework", "users", "cars", "import_export"]
 
 INSTALLED_APPS += EXTERNAL_APPS
 

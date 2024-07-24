@@ -1,7 +1,8 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
+
 from cars.models import AreaName, Car, ParkingDetails
 from cars.resource import CarModelResource
-from import_export.admin import ImportExportModelAdmin
 
 # class CarModelAdmin(admin.ModelAdmin):
 #     list_display = ["liscence"]
@@ -19,6 +20,7 @@ class ParkModelAdmin(admin.ModelAdmin):
 admin.site.register(AreaName, AreaModelAdmin)
 admin.site.register(ParkingDetails, ParkModelAdmin)
 
+
 @admin.register(Car)
 class CarResourceAdmin(ImportExportModelAdmin):
-    resource_class=CarModelResource
+    resource_class = CarModelResource
