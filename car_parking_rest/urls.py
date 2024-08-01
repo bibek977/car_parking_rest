@@ -1,3 +1,4 @@
+from django.conf.urls.i18n import i18n_patterns, set_language
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework_simplejwt.views import (
@@ -5,14 +6,11 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
-from django.conf.urls.i18n import set_language
-from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = [
     path(
         "api-auth/", include("rest_framework.urls", namespace="rest_framework")
     ),  # noqa
-
 ]
 
 urlpatterns += [
@@ -26,7 +24,7 @@ urlpatterns += [
 urlpatterns += i18n_patterns(
     path("", include("cars.api.urls")),
     path("users/", include("users.api.urls")),
-    path('i18n/set_language/', set_language, name='set_language'),
-    path('rosetta/', include('rosetta.urls')),
+    path("i18n/set_language/", set_language, name="set_language"),
+    path("rosetta/", include("rosetta.urls")),
     path("admin/", admin.site.urls),
 )

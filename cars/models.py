@@ -6,7 +6,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
-
 User = get_user_model()
 
 
@@ -23,10 +22,11 @@ class Car(BaseModel):
     brand = models.CharField(_("car_brand"), max_length=100)
     color = models.CharField(_("color_of_car"), max_length=50)
     liscence = models.CharField(
-        _("liscence_number"), max_length=20, unique=True
-    )
+        _("liscence_number"), max_length=20, unique=True)
     status = models.BooleanField(_("car_status"), default=False)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Car Owner"))
+    owner = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name=_("Car Owner")
+    )
 
     class Meta:
         verbose_name = _("Car")
@@ -50,10 +50,16 @@ class AreaName(BaseModel):
 
 class ParkingDetails(BaseModel):
     car = models.ForeignKey(
-        Car, on_delete=models.CASCADE, related_name="liscences", verbose_name=_("Car Number")
+        Car,
+        on_delete=models.CASCADE,
+        related_name="liscences",
+        verbose_name=_("Car Number"),
     )  # noqa
     area = models.ForeignKey(
-        AreaName, on_delete=models.CASCADE, related_name="areas", verbose_name=_("Area Name")
+        AreaName,
+        on_delete=models.CASCADE,
+        related_name="areas",
+        verbose_name=_("Area Name"),
     )  # noqa
     status = models.BooleanField(_("parking_status"), default=True)
     checked_in = models.DateTimeField(_("date_checked_in"), auto_now_add=True)
