@@ -1,0 +1,143 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-01 12:07+0545\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: car_parking_rest/settings.py:134
+msgid "English"
+msgstr "अंग्रेजी"
+
+#: car_parking_rest/settings.py:135
+msgid "Nepali"
+msgstr "नेपाली"
+
+#: cars/models.py:23
+msgid "car_brand"
+msgstr "कार ब्राण्ड"
+
+#: cars/models.py:24
+msgid "color_of_car"
+msgstr "कारको रंग"
+
+#: cars/models.py:26
+msgid "liscence_number"
+msgstr "लाइसेन्स नम्बर"
+
+#: cars/models.py:28
+msgid "car_status"
+msgstr "कारको स्थिति"
+
+#: cars/models.py:29
+msgid "Car Owner"
+msgstr "कार मालिक"
+
+#: cars/models.py:32
+msgid "Car"
+msgstr "कार"
+
+#: cars/models.py:33
+msgid "All_Cars"
+msgstr "सबै कारहरू"
+
+#: cars/models.py:40
+msgid "area_name"
+msgstr "क्षेत्रको नाम"
+
+#: cars/models.py:41
+msgid "area_status"
+msgstr "क्षेत्रको स्थिति"
+
+#: cars/models.py:44
+msgid "Area"
+msgstr "क्षेत्र"
+
+#: cars/models.py:45
+msgid "Total_Area"
+msgstr "कुल क्षेत्र"
+
+#: cars/models.py:53
+msgid "Car Number"
+msgstr "कार नम्बर"
+
+#: cars/models.py:56
+msgid "Area Name"
+msgstr "क्षेत्र"
+
+#: cars/models.py:58
+msgid "parking_status"
+msgstr "पार्किङ स्थिति"
+
+#: cars/models.py:59
+msgid "date_checked_in"
+msgstr "चेक इन मिति"
+
+#: cars/models.py:61
+msgid "date_checked_out"
+msgstr "चेक आउट मिति"
+
+#: cars/models.py:65
+msgid "Parking"
+msgstr "पार्किङ"
+
+#: cars/models.py:66
+msgid "Parking_Details"
+msgstr "पार्किङ विवरण"
+
+#: users/manager.py:37
+msgid "Superuser must have is_staff=True"
+msgstr "सुपरयूजरले is_staff=True हुनै पर्छ"
+
+#: users/manager.py:39
+msgid "Superuser must have is_superuser=True"
+msgstr "सुपरयूजरले is_superuser=True हुनै पर्छ"
+
+#: users/models.py:14
+msgid "viewer"
+msgstr "दर्शक"
+
+#: users/models.py:15
+msgid "employee"
+msgstr "कर्मचारी"
+
+#: users/models.py:16
+msgid "boss"
+msgstr "बॉस"
+
+#: users/models.py:18
+msgid "email"
+msgstr "इमेल"
+
+#: users/models.py:19
+msgid "phone"
+msgstr "फोन"
+
+#: users/models.py:20
+msgid "full_name"
+msgstr "पुरा नाम"
+
+#: users/models.py:29
+msgid "Owner"
+msgstr "कार मालिक"
+
+#: users/models.py:44
+msgid "User"
+msgstr "प्रयोगकर्ता"
+
+#: users/models.py:45
+msgid "Users"
+msgstr "प्रयोगकर्ताहरू"

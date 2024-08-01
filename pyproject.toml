@@ -26,7 +26,6 @@ click-repl = "0.3.0"
 crashtest = "0.4.1"
 cryptography = "42.0.8"
 distlib = "0.3.8"
-django = "5.0.7"
 django-filter = "24.2"
 djangorestframework = "3.15.2"
 djangorestframework-simplejwt = "5.3.1"
@@ -81,6 +80,9 @@ sphinx = "^7.4.7"
 django-import-export = {extras = ["xlsx"], version = "^4.1.1"}
 pandas = "^2.2.2"
 openpyxl = "^3.1.5"
+django = "4.2"
+django-modeltranslation = "^0.18.0"
+
 
 
 [tool.poetry.group.dev.dependencies]

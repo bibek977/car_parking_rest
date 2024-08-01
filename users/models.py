@@ -11,9 +11,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
 
     OWNER_CHOICES = (
-        ("viewer", "viewer"),
-        ("employee", "employee"),
-        ("boss", "boss"),
+        ("viewer", _("viewer")),
+        ("employee", _("employee")),
+        ("boss", _("boss")),
     )  # noqa
     email = models.EmailField(_("email"), unique=True)
     phone = models.CharField(_("phone"), unique=True, max_length=100)
@@ -26,13 +26,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     last_login = models.DateTimeField(auto_now=True)
 
     owner = models.CharField(
-        max_length=50, choices=OWNER_CHOICES, default="viewer"
+        max_length=50, choices=OWNER_CHOICES, default="viewer", verbose_name=_("Owner")
     )  # noqa
 
     objects = CustomUserManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["phone"]
+    REQUIRED_FIELDS = ["name"]
 
     def __str__(self):
         return self.email

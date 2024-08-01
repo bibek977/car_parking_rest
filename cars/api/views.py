@@ -153,9 +153,9 @@ class ParkViewSet(viewsets.ModelViewSet):
         park.status = False
         park.checked_out = timezone.now()
         park.save()
-        car = Car.objects.get(liscence=park.car)
+        car = Car.objects.get(id=park.car.id)
         car.status = False
-        area = AreaName.objects.get(name=park.area)
+        area = AreaName.objects.get(id=park.area.id)
         area.status = False
         area.save()
 
